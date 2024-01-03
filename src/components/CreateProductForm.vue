@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent width="1024">
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
+        <v-btn color="primary" v-bind="props"> Create Product </v-btn>
       </template>
       <v-card>
         <v-card-title>
@@ -48,18 +48,27 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import axios from 'axios';
-export default {
-  data: () => ({
-    dialog: false,
-    productName: '', // Variabel untuk menyimpan nama produk
-    productPrice: '', // Variabel untuk menyimpan harga produk
-    selectedFile: null, // Variabel untuk menyimpan berkas yang dipilih
-  }),
+export default defineComponent({
+  data() {
+    return {
+      dialog: false,
+      productName: '', // Variabel untuk menyimpan nama produk
+      productPrice: '', // Variabel untuk menyimpan harga produk
+      selectedFile: null as File | null,
+      // Variabel untuk menyimpan berkas yang dipilih
+    };
+  },
 
   methods: {
-    async createProduct() {
+    async createProduct(this: {
+      dialog: boolean;
+      productName: string;
+      productPrice: string;
+      selectedFile: null;
+    }) {
       try {
         const formProduct = new FormData();
 
@@ -84,7 +93,7 @@ export default {
         alert('product created successfully');
 
         this.dialog = false;
-      } catch (error) {
+      } catch (error: any) {
         if (error.response) {
           alert(error.response.data.msg);
         } else {
@@ -93,7 +102,7 @@ export default {
       }
     },
   },
-};
+});
 
 // const createProduct = async () => {
 //   await axios.post
