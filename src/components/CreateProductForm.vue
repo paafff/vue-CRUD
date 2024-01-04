@@ -36,7 +36,16 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="
+              dialog = false;
+              productName = '';
+              productPrice = '';
+              selectedFile = null;
+            "
+          >
             Close
           </v-btn>
           <v-btn color="blue-darken-1" variant="text" @click="createProduct">
@@ -68,6 +77,7 @@ export default defineComponent({
       productName: string;
       productPrice: string;
       selectedFile: null;
+      getProducts: Function;
     }) {
       try {
         const formProduct = new FormData();
@@ -93,6 +103,12 @@ export default defineComponent({
         alert('product created successfully');
 
         this.dialog = false;
+        this.getProducts();
+
+        // Reset nilai-nilai form
+        this.productName = '';
+        this.productPrice = '';
+        this.selectedFile = null;
       } catch (error: any) {
         if (error.response) {
           alert(error.response.data.msg);
@@ -100,6 +116,13 @@ export default defineComponent({
           console.log(error);
         }
       }
+    },
+  },
+
+  props: {
+    getProducts: {
+      type: Function,
+      required: true,
     },
   },
 });

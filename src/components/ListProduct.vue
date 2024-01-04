@@ -22,9 +22,17 @@
       </v-card-text>
 
       <v-card-actions class="flex flex-row justify-between">
-        <v-btn color="green"> Update </v-btn>
+        <v-btn color="green">
+          <DeleteProduct />
+        </v-btn>
 
-        <v-btn color="red"> Delete </v-btn>
+        <v-btn color="red">
+          <DeleteProduct
+            :productSelectedUUID="product.uuid"
+            :productSelectedName="product.name"
+            :getProducts="getProducts"
+          />
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -34,6 +42,7 @@
 import Vue from 'vue';
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
+import DeleteProduct from './../components/DeleteProduct.vue';
 
 export default defineComponent({
   props: {
@@ -41,8 +50,18 @@ export default defineComponent({
       type: Array as PropType<any[]>,
       required: true,
     },
+    getProducts: {
+      type: Function,
+      required: true,
+    },
   },
 
-  
+  data() {
+    return {
+      dialog: false,
+    };
+  },
+
+  components: { DeleteProduct },
 });
 </script>

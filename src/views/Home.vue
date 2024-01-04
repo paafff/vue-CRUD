@@ -2,10 +2,10 @@
   <div class="min-h-screen w-full flex flex-col justify-evenly">
     <div class="">
       <!-- <v-btn color="primary" @click="dialog = true">Open Dialog</v-btn> -->
-      <CreateProductForm :dialog="dialog" @closeDialog="dialog = false" />
+      <CreateProductForm :dialog="dialog" @closeDialog="dialog = false" :getProducts="getProducts" />
     </div>
     <div>
-      <ListProduct :dataProducts="dataProducts" />
+      <ListProduct :dataProducts="dataProducts"  :getProducts="getProducts"/>
     </div>
   </div>
 </template>
