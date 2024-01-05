@@ -15,15 +15,22 @@
         <!-- <v-card-title></v-card-title> -->
       </v-img>
 
-      <v-card-subtitle class="pt-4"> {{ product.name }} </v-card-subtitle>
+      <v-card-subtitle class="pt-4 font-bold text-white text-4xl">
+        {{ product.uuid }}
+      </v-card-subtitle>
 
       <v-card-text>
+        <div>{{ product.name }}</div>
         <div>{{ product.price }}</div>
       </v-card-text>
 
       <v-card-actions class="flex flex-row justify-between">
         <v-btn color="green">
-          <DeleteProduct />
+          <UpdateProductForm
+            :productSelectedUUID="product.uuid"
+            :productSelectedName="product.name"
+            :getProducts="getProducts"
+          />
         </v-btn>
 
         <v-btn color="red">
@@ -43,6 +50,7 @@ import Vue from 'vue';
 import { defineComponent, PropType } from 'vue';
 import axios from 'axios';
 import DeleteProduct from './../components/DeleteProduct.vue';
+import UpdateProductForm from './../components/UpdateProductForm.vue';
 
 export default defineComponent({
   props: {
@@ -62,6 +70,6 @@ export default defineComponent({
     };
   },
 
-  components: { DeleteProduct },
+  components: { DeleteProduct, UpdateProductForm },
 });
 </script>

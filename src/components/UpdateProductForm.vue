@@ -2,11 +2,13 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent width="1024">
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Create Product </v-btn>
+        <v-btn color="primary" v-bind="props"> Update </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Create Data Product</span>
+          <span class="text-h5"
+            >Update Data Product {{ productSelectedUUID }}</span
+          >
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -48,8 +50,8 @@
           >
             Close
           </v-btn>
-          <v-btn color="blue-darken-1" variant="text" @click="createProduct">
-            Create Product
+          <v-btn color="blue-darken-1" variant="text" @click="updateProduct">
+            Update Product
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -58,8 +60,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import axios from 'axios';
+import { defineComponent, PropType } from 'vue';
+
 export default defineComponent({
   data() {
     return {
@@ -71,41 +74,55 @@ export default defineComponent({
     };
   },
 
+  props: {
+    getProducts: {
+      type: Function,
+      required: true,
+    },
+
+    productSelectedUUID: {
+      type: String,
+      required: true,
+    },
+    productSelectedName: {
+      type: String,
+      required: true,
+    },
+  },
+
   methods: {
-    async createProduct(this: {
+    async updateProduct(this: {
       dialog: boolean;
       productName: string;
       productPrice: string;
       selectedFile: null;
       getProducts: Function;
+      productSelectedUUID: string;
     }) {
       try {
         const formProduct = new FormData();
 
         formProduct.append('name', this.productName);
-        formProduct.append('price', String(this.productPrice));
+        formProduct.append('price', this.productPrice);
 
         if (this.selectedFile !== null) {
           formProduct.append('imageProduct', this.selectedFile[0]);
         } else {
-          throw new Error('Image is required');
+          this.selectedFile = null;
         }
 
-        console.log(
-          '🚀 ~ file: CreateProductForm.vue:71 ~ createProduct ~ this.selectedFile:',
-          this.selectedFile[0]
+        await axios.patch(
+          `http://localhost:5000/products/${this.productSelectedUUID}`,
+          formProduct,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
         );
 
-        await axios.post('http://localhost:5000/products', formProduct, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-
-        alert('product created successfully');
-
+        alert('product updated successfully');
         this.dialog = false;
         this.getProducts();
 
-        // Reset nilai-nilai form
         this.productName = '';
         this.productPrice = '';
         this.selectedFile = null;
@@ -118,16 +135,5 @@ export default defineComponent({
       }
     },
   },
-
-  props: {
-    getProducts: {
-      type: Function,
-      required: true,
-    },
-  },
 });
-
-// const createProduct = async () => {
-//   await axios.post
-// };
 </script>

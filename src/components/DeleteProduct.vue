@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent width="auto">
       <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Delete Product </v-btn>
+        <v-btn color="red" v-bind="props"> Delete </v-btn>
       </template>
       <v-card>
         <v-card-title class="text-h5">
@@ -52,7 +52,11 @@ export default {
     },
   },
   methods: {
-    async deleteProduct(this: { dialog: false; getProducts: Function }) {
+    async deleteProduct(this: {
+      dialog: false;
+      getProducts: Function;
+      productSelectedUUID: string;
+    }) {
       try {
         axios.delete(
           `http://localhost:5000/products/${this.productSelectedUUID}`
